@@ -103,7 +103,7 @@ function set_git_branch {
   glab_pattern="$HOME/gitlab/.*"
   if [[ ${repo_location} =~ ${glab_pattern} ]]; then
     # ${CYAN}gl$COLOR_NONE:
-    repo_name="${CYAN}${repo_name}"
+    repo_name="${PURPLE}${repo_name}"
   fi
 
   # Set the final branch string.
@@ -140,6 +140,14 @@ function set_host_color () {
 }
 
 
+function set_venv_name () {
+  if [ -n "$VIRTUAL_ENV" ]; then
+    PROMPT_VENV=$(echo $VIRTUAL_ENV | sed -r -e 's!.*/!!')
+    PROMPT_VENV=" $WHITE[$GREEN$PROMPT_VENV$WHITE]"
+  fi
+}
+
+
 
 # Return the prompt symbol to use, colorized based on the return value of the
 # previous command.
@@ -167,6 +175,8 @@ function set_bash_prompt () {
   # Zero out branch variable if we aren't in github repo.
   if [[ $PWD/ = $HOME/github/* ]]; then
     BRANCH=$BRANCH
+  elif [[ $PWD/ = $HOME/gitlab/* ]]; then
+    BRANCH=$BRANCH
   elif [[ $PWD/ = $HOME/sandbox/* ]]; then
     BRANCH=$BRANCH
   elif [[ $PWD/ = $HOME/bits/* ]]; then
@@ -177,13 +187,23 @@ function set_bash_prompt () {
   
   set_user_color
   set_host_color
+  set_venv_name
+
+  PS1="$USER_COLOR\u$COLOR_NONE@$HOST_COLOR\h"
   
+  if [ -n "$PROMPT_VENV" ]; then
+    PS1="$PS1$PROMPT_VENV"
+  fi
+
   if [ -n "$BRANCH" ]; then
     # If in git branch
-    PS1="$USER_COLOR\u$COLOR_NONE@$HOST_COLOR\h $BRANCH$PROMPT_SYMBOL$COLOR_NONE "
+    PS1="$PS1 $BRANCH"
   else
-    PS1="$USER_COLOR\u$COLOR_NONE@$HOST_COLOR\h:$L_BLUE\w$PROMPT_SYMBOL$COLOR_NONE "
+    PS1="$PS1$COLOR_NONE:$L_BLUE\w"
   fi
+
+  PS1="$PS1$PROMPT_SYMBOL$COLOR_NONE "
+
 }
 
 
@@ -193,6 +213,9 @@ PROMPT_COMMAND=set_bash_prompt
 # --- end https://gist.github.com/sundeepgupta/b099c31ee2cc1eb31b6d --- 
  
 alias ls="ls --color -AFv"
+alias hub="cd ~/github/"
+alias lab="cd ~/gitlab/"
+
 export PS1="$GREEN\u$COLOR_NONE@$WHITE\h $L_BLUE\W \$ $COLOR_NONE"
 export PATH=$PATH:$HOME/funbox/ioke/dist/ioke/bin:$HOME/funbox/clojure/dist:$HOME/bin:/opt/scala/bin:$HOME/rust-inst/bin:$HOME/.cargo/bin
 export SCALA_HOME=/opt/scala
