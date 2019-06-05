@@ -1,0 +1,4 @@
+# Save this file in ~/.nanorc
+set const
+set constantshow
+set linenumbers

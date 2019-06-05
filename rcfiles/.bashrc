@@ -217,10 +217,15 @@ alias hub="cd ~/github/"
 alias lab="cd ~/gitlab/"
 
 export PS1="$GREEN\u$COLOR_NONE@$WHITE\h $L_BLUE\W \$ $COLOR_NONE"
-export PATH=$PATH:$HOME/funbox/ioke/dist/ioke/bin:$HOME/funbox/clojure/dist:$HOME/bin:/opt/scala/bin:$HOME/rust-inst/bin:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/local/bin/:$HOME/.local/bin/:$HOME/funbox/ioke/dist/ioke/bin:$HOME/funbox/clojure/dist:$HOME/bin:/opt/scala/bin:$HOME/rust-inst/bin:$HOME/.cargo/bin
 export SCALA_HOME=/opt/scala
 export GEM_HOME=$HOME/.gemhome
 export RUBYOPT=rubygems
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
+
+export CPPFLAGS="$CPPFLAGS -I$HOME/local/include"
+export LDFLAGS="$LDFLAGS -L$HOME/local/lib"
+export PKG_CONFIG_PATH="$HOME/local/lib/pkgconfig"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/local/lib"
 
