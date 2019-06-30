@@ -96,8 +96,7 @@ function set_git_branch {
 
   ghub_pattern="$HOME/github/.*"
   if [[ ${repo_location} =~ ${ghub_pattern} ]]; then
-    # ${GRASS}gh$COLOR_NONE:
-    repo_name="${GRASS}${repo_name}"
+    repo_name="${GRASS}gh$COLOR_NONE:${GRASS}${repo_name}"
   fi
 
   glab_pattern="$HOME/gitlab/.*"
@@ -105,6 +104,12 @@ function set_git_branch {
     # ${CYAN}gl$COLOR_NONE:
     repo_name="${PURPLE}${repo_name}"
   fi
+
+  go_pattern="$HOME/go-workspace/src/github.com/.*"
+  if [[ ${repo_location} =~ ${go_pattern} ]]; then
+    repo_name="${CYAN}go$COLOR_NONE:${CYAN}${repo_name}"
+  fi
+
 
   # Set the final branch string.
   BRANCH="${state}(${repo_name}$COLOR_NONE:${state}${branch})${remote}${L_BLUE}/${relative_path}${COLOR_NONE}"
@@ -181,6 +186,8 @@ function set_bash_prompt () {
     BRANCH=$BRANCH
   elif [[ $PWD/ = $HOME/bits/* ]]; then
     BRANCH=$BRANCH
+  elif [[ $PWD/ = $HOME/go-workspace/src/github.com/* ]]; then
+    BRANCH=$BRANCH
   else
     BRANCH=''
   fi
@@ -228,4 +235,12 @@ export CPPFLAGS="$CPPFLAGS -I$HOME/local/include"
 export LDFLAGS="$LDFLAGS -L$HOME/local/lib"
 export PKG_CONFIG_PATH="$HOME/local/lib/pkgconfig"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/local/lib"
+
+# Node user-global.
+export PATH="$HOME/.node-inst/node_modules/.bin:$PATH"
+
+# Go. Symlink your versioned install to 'go-root'.
+export GOROOT="$HOME/go-root/"
+export PATH="$HOME/go-root/bin:$PATH"
+export GOPATH="$HOME/go-workspace/"
 
